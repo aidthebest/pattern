@@ -11,10 +11,8 @@ import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.$;
 
 class DeliveryTest {
 
@@ -38,20 +36,27 @@ class DeliveryTest {
         // имени и номера телефона без создания пользователя в методе generateUser(String locale) в датагенераторе
 
 
-        $("[placeholder=Город]").setValue("ма");
-        $(byText("Майкоп")).click();
+        $("[placeholder=Город]").setValue(DataGenerator.generateCity("ru"));
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.SPACE);
         LocalDate localDate = LocalDate.now();
-        LocalDate newDate = localDate.plusDays(5);
+        LocalDate newDate = localDate.plusDays(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String dateText = newDate.format(formatter);
         $("[data-test-id=date] input").setValue(dateText);
-        $(("[data-test-id=name] input")).setValue("Иванов Тарас Игнатьевич");
-        $(("[data-test-id=phone] input")).setValue("+79264775516");
+        $(("[data-test-id=name] input")).setValue(DataGenerator.generateName("ru"));
+        $(("[data-test-id=phone] input")).setValue(DataGenerator.generatePhone("ru"));
         $("span.checkbox__box").click();
         $$("button").find(exactText("Запланировать")).click();
-        $(withText("успешно"))
-                .shouldBe(visible, Duration.ofSeconds(14))
-                .shouldHave(exactText("Встреча успешно забронирована на " + dateText));
+        $$("button").find(exactText("Запланировать")).click();
+        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.SPACE);
+
+        LocalDate newDate2 = newDate.plusDays(4);
+        String actualDate = newDate2.format(formatter);
+
+        $("[data-test-id=date] input").setValue(actualDate);
+        $$("button").find(exactText("Перепланировать")).click();
+        $(withText("Встреча успешно запланирована на"))
+                .shouldBe(visible, Duration.ofSeconds(4))
+                .shouldHave(exactText("Встреча успешно запланирована на  " + actualDate));
     }
 }
