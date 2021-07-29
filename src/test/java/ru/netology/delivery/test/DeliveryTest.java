@@ -30,12 +30,17 @@ class DeliveryTest {
         $(("[data-test-id=phone] input")).setValue(DataGenerator.generatePhone("ru"));
         $("span.checkbox__box").click();
         $$("button").find(exactText("Запланировать")).click();
-        $$("button").find(exactText("Запланировать")).click();
+        $(withText("Встреча успешно запланирована на"))
+                .shouldBe(visible, Duration.ofSeconds(4))
+                .shouldHave(exactText("Встреча успешно запланирована на  " + DataGenerator.generateDate(3)));
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.SPACE);
         $("[data-test-id=date] input").setValue(DataGenerator.generateDate(7));
+        $$("button").find(exactText("Запланировать")).click();
+        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.SPACE);
+        $("[data-test-id=date] input").setValue(DataGenerator.generateDate(9));
         $$("button").find(exactText("Перепланировать")).click();
         $(withText("Встреча успешно запланирована на"))
                 .shouldBe(visible, Duration.ofSeconds(4))
-                .shouldHave(exactText("Встреча успешно запланирована на  " + DataGenerator.generateDate(7)));
+                .shouldHave(exactText("Встреча успешно запланирована на  " + DataGenerator.generateDate(9)));
     }
 }
