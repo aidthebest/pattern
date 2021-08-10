@@ -21,28 +21,19 @@ allure {
     }
 }
 
-configurations {
-    testCompile {
-        extendsFrom testImplementation
+    repositories {
+        mavenCentral()
     }
-}
-repositories {
-    jcenter()
-    mavenCentral()
-}
+    dependencies {
 
-dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+        testImplementation 'com.codeborne:selenide:5.23.2'
+        testImplementation 'org.seleniumhq.selenium:selenium-chrome-driver:3.141.59'
+        testImplementation"io.github.bonigarcia:webdrivermanager:4.4.3"
+        testImplementation 'com.github.javafaker:javafaker:1.0.2'
+        testImplementation 'io.qameta.allure:allure-selenide:2.14.0'
 
-
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    testImplementation 'com.codeborne:selenide:5.23.2'
-    testImplementation 'org.seleniumhq.selenium:selenium-chrome-driver:3.141.59'
-    testImplementation"io.github.bonigarcia:webdrivermanager:4.4.3"
-    testImplementation 'com.github.javafaker:javafaker:1.0.2'
-    testImplementation 'io.qameta.allure:allure-selenide:2.14.0'
-//    testRuntimeOnly' org.junit.jupiter:junit-jupiter-engine:5.7.2'
-}
-
+    }
 
 test {
     useJUnitPlatform()
